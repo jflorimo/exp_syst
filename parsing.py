@@ -1,6 +1,17 @@
 import string
+from var import Var
 from error import exit_error
-authorizedChars = "+|^()=<>!? " +''.join(list(string.ascii_uppercase))
+
+
+autorizedVars = list(string.ascii_uppercase)
+authorizedSpecialChars = "+|^()=<>!? 	"
+authorizedChars = authorizedSpecialChars +''.join(autorizedVars)
+
+def isVar(letter):
+	for var in autorizedVars:
+		if var == letter:
+			return True
+	return False
 
 def checkAuthorizedChar(letter):
 	for char in authorizedChars:
@@ -8,15 +19,22 @@ def checkAuthorizedChar(letter):
 			return True
 	return False;
 
-def parseLine(line, letters):
+def fillVar(vars, letter):
+	if isVar(letter):
+		if not letter in vars:
+			vars[letter] = Var(letter)
+
+def parseLine(line, vars, input, output, queries):
 	parsedLine = ""
 	if len(line.strip()) > 0 and line.strip()[0] != '#':
 		for letter in line:
 			if (letter == '#'):
 				break
 			if (checkAuthorizedChar(letter)):
-				if (letter != ' '):
+				if not letter.isspace():
 					parsedLine += letter
+					fillVar(vars, letter)
 			else:
-				exit_error("Unauthorized char in input file")	
-		print(parsedLine)
+				exit_error("Unauthorized char in input file")
+		# processLine(parsedLine, input, output, queries)
+

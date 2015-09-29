@@ -1,11 +1,14 @@
 import sys
 from parsing import parseLine
 
-letters = {}
+vars = {}
+input = ""
+output = ""
+queries = ""
 
 def parse( lines ):
 	for tmp in lines:
-		parseLine(tmp, letters)
+		parseLine(tmp, vars, input, output, queries)
 		# Go parse here
 
 def read( filename ):
@@ -27,4 +30,8 @@ if ( len(sys.argv) < 2 ) :
 	exit( -1 )
 
 print(sys.argv[1])
+print(str(vars))
 read(sys.argv[1])
+# print(str(vars))
+for var in vars:
+	print(vars[var].toString())
