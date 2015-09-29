@@ -36,5 +36,7 @@ def parseLine(line, vars, input, output, queries):
 					fillVar(vars, letter)
 			else:
 				exit_error("Unauthorized char in input file")
-		# processLine(parsedLine, input, output, queries)
+		# processLine(parsedLine, input, output, queries
+		#^([!]?[A-Z])([+^|]([!]?[A-Z]))*(=>|<=>)([!]?[A-Z])([+^|]([!]?[A-Z]))*$
+		print(parsedLine)
 
