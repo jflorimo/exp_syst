@@ -10,5 +10,5 @@ print (A | B)
 B.setValue('1')
 print (A | B)
 
-test = Query("-A + B + C | D")
+test = Query("-A+B+C|D")
 test.run("pok")

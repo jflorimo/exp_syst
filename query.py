@@ -6,21 +6,23 @@ class Query(object):
 		self.queryStr = querystr
 
 	def isOperator(self, str):
-		operator = ['+', '|', '&', '^']
-		print ((str in operator))
+		operator = ['+', '|', '&', '^', '-']
 		if (str in operator):
 			return (True)
 		return (False)
 
-	def run(self, varMap):
+	def calcul(self, varMap):
 		left = "old Value"
 		operator = "+"
 		right = None
-		tmp = self.queryStr.split(" ")
 
-		for x in tmp:
+		for x in self.queryStr:
 			if ( operator == None and self.isOperator(x) ):
 				operator = x
+			elif ( operator != None and self.isOperator(x) ):
+				tmpOp = 0 if operator == '+' else -1
+				tmpOp2 = 0 if x == '+' else -1
+				operator = '-' if tmpOp + tmpOp2 == -1 else '+'
 			elif ( right == None ):
 				right = x
 				print (left + operator + right)
