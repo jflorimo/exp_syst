@@ -11,6 +11,9 @@ class Var(object):
 	def getValue(self):
 		return ( self.value )
 
+	def toString(self):
+		return self.name + ": "  + str(self.value)
+
 	# OPERATOR OVERLOADING
 	def __add__(self, b):
 		return (int(self.value) + int(b.getValue()))
