@@ -1,8 +1,11 @@
 import sys
+from parsing import parseLine
+
+letters = {}
 
 def parse( lines ):
 	for tmp in lines:
-		print(tmp)
+		parseLine(tmp, letters)
 		# Go parse here
 
 def read( filename ):
