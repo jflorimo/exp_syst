@@ -2,9 +2,22 @@ import sys
 from parsing import parseLine
 
 vars = {}
-input = ""
-output = ""
-queries = ""
+input = []
+output = []
+queries = []
+
+
+def debug():
+	print("######Vars:######")
+	for var in vars:
+		print(vars[var].toString())
+	print("######Queries:######")
+	for query in queries:
+		print(query)
+	print("######Input:######")
+	print(input)
+	print("######OutPut:######")
+	print(output)
 
 def parse( lines ):
 	for tmp in lines:
@@ -30,8 +43,7 @@ if ( len(sys.argv) < 2 ) :
 	exit( -1 )
 
 print(sys.argv[1])
-print(str(vars))
 read(sys.argv[1])
-# print(str(vars))
-for var in vars:
-	print(vars[var].toString())
+debug()
+
+
