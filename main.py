@@ -1,6 +1,7 @@
-import sys
-from parsing import parseLine
-from utils import init_vars
+import					sys
+from parsing import		parseLine
+from utils import		init_varsValue
+from utils import		init_varsQueries
 
 vars = {}
 input = []
@@ -11,7 +12,7 @@ queries = []
 def debug():
 	print("######Vars:######")
 	for var in vars:
-		print(vars[var].toString())
+		vars[var].display()
 	print("######Queries:######")
 	for query in queries:
 		print(query)
@@ -45,7 +46,9 @@ if ( len(sys.argv) < 2 ) :
 
 print(sys.argv[1])
 read(sys.argv[1])
-init_vars(vars, input)
+init_varsValue(vars, input)
+init_varsQueries(vars, queries)
 debug()
+
 
 
