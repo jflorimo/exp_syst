@@ -1,14 +1,18 @@
-from var import Var
+import re
 from query import Query
 
-A = Var('A')
-B = Var('B')
+# from var import Var
 
-print (A | B)
-A.setValue('1')
-print (A | B)
-B.setValue('1')
-print (A | B)
+# A = Var('A')
+# B = Var('B')
 
-test = Query("-A+B+C|D")
-test.run("pok")
+# print (A + B)
+# A.setValue('1')
+# print (A + B)
+# B.setValue('1')
+# print (A + B)
+
+test = Query("(A+B)|(C|D+(A+B))")
+# test.run("pok")
+
+
