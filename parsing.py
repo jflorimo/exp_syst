@@ -1,4 +1,5 @@
 import string
+import re
 from var import Var
 from error import exit_error
 
@@ -6,6 +7,9 @@ from error import exit_error
 autorizedVars = list(string.ascii_uppercase)
 authorizedSpecialChars = "+|^()=<>!? 	"
 authorizedChars = authorizedSpecialChars +''.join(autorizedVars)
+
+def getQueryRegex():
+	return "^(([!]?[A-Z])([+^|]([!]?[A-Z]))*)(=>|<=>)(([!]?[A-Z])([+^|]([!]?[A-Z]))*)$"
 
 def isVar(letter):
 	for var in autorizedVars:
@@ -24,6 +28,20 @@ def fillVar(vars, letter):
 		if not letter in vars:
 			vars[letter] = Var(letter)
 
+def checkLine(line, input, output, queries):
+	regexQuery = getQueryRegex()
+	regexInput = "^([=][]A-Z]{1,})$"
+	regexOutput = "^([?][]A-Z]{1,})$"
+
+	if re.search(regexQuery, line):
+		queries.append(line)
+	elif re.search(regexInput, line):
+		input.extend(list(line[1:]))
+	elif re.search(regexOutput, line):
+		output.extend(list(line[1:]))
+	else:
+		exit_error("Unauthorized Line in file: "+ line) 
+
 def parseLine(line, vars, input, output, queries):
 	parsedLine = ""
 	if len(line.strip()) > 0 and line.strip()[0] != '#':
@@ -36,7 +54,5 @@ def parseLine(line, vars, input, output, queries):
 					fillVar(vars, letter)
 			else:
 				exit_error("Unauthorized char in input file")
-		# processLine(parsedLine, input, output, queries
-		#^([!]?[A-Z])([+^|]([!]?[A-Z]))*(=>|<=>)([!]?[A-Z])([+^|]([!]?[A-Z]))*$
-		print(parsedLine)
+		checkLine(parsedLine, input, output, queries)
 
