@@ -1,5 +1,6 @@
 import sys
 from parsing import parseLine
+from utils import init_vars
 
 vars = {}
 input = []
@@ -44,6 +45,7 @@ if ( len(sys.argv) < 2 ) :
 
 print(sys.argv[1])
 read(sys.argv[1])
+init_vars(vars, input)
 debug()
 
 
