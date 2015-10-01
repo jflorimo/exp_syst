@@ -20,7 +20,7 @@ class Var(object):
 
 	# OPERATOR OVERLOADING
 	def __add__(self, b):
-		return (int(self.value) + int(b.getValue()))
+		return (int(self.value) and int(b.getValue()))
 
 	def __sub__(self, b):
 		return (int(self.value) - int(b.getValue()))
