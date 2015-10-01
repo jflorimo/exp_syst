@@ -5,7 +5,7 @@ from error import exit_error
 
 
 autorizedVars = list(string.ascii_uppercase)
-authorizedSpecialChars = "+|^()=<>!? 	"
+authorizedSpecialChars = "+|^()=<>!? 	\n"
 authorizedChars = authorizedSpecialChars +''.join(autorizedVars)
 
 def getQueryRegex():
