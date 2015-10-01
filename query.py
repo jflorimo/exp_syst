@@ -10,20 +10,26 @@ class Query(object):
 		self.child = 0
 		self.resolver = self.createResolver(self.left)
 
-	def findSubQuery( self, result ) :
-		regexp = "(\((!?([A-Z]|\?)[+^|]){1,}!?([A-Z]|\?)\))"
-		pos = re.search(regexp, result)
-		if (pos == None):
-			return False
-		tmp = result[pos.start():pos.end()]
-		if tmp.find("?") > 0 :
+	def op_add(self, l, r):
+		return (l + r)
+
+	def op_or(self, l, r):
+		return (l | r)
+
+	def op_xor(self, l, r):
+		return (l ^ r)
+
+	def isOperator(self, str):
+		operator = ['+', '|', '&', '^', '-']
+		if (str in operator):
 			return (True)
-		return False
+		return (False)
 
 	def createResolver( self, result ):
 		resultold = result
 		i = 0
 		regexp = "(\((!?([A-Z]|\?)[+^|]){1,}!?([A-Z]|\?)\))"
+
 		while ( result != re.sub(regexp, "?", result)):
 			result = re.sub(regexp, "?", result)
 		tmp_final = result
@@ -38,12 +44,6 @@ class Query(object):
 
 		return resolver
 
-	def isOperator(self, str):
-		operator = ['+', '|', '&', '^', '-']
-		if (str in operator):
-			return (True)
-		return (False)
-
 	def run(self, varMap):
 		return (self.parse_resolver(varMap, self.resolver).getValue())
 
@@ -51,6 +51,7 @@ class Query(object):
 		tmp = {}
 		elem = None
 		self.child = 0
+
 		for (key, value) in resolver.items():
 			if (elem == None):
 				elem = key
@@ -61,15 +62,6 @@ class Query(object):
 			elem = str.replace(elem, "?", var.getName(), 1)
 		return (self.calcul(elem, tmp))
 
-	def op_add(self, l, r):
-		return (l + r)
-
-	def op_or(self, l, r):
-		return (l | r)
-
-	def op_xor(self, l, r):
-		return (l ^ r)
-
 	def calcul(self, query, varMap):
 		l = Var(str(self.child))
 		l.setValue(1)
@@ -79,6 +71,7 @@ class Query(object):
 				"^": self.op_xor
 			}
 		op = "+"
+
 		for x in query:
 			if ( op == None and self.isOperator(x) == True ):
 				op = x
