@@ -1,8 +1,11 @@
+from error import exit_error
+
 class Var(object):
 
 	def __init__(self, name):
 		self.name = name
 		self.value = 0
+		self.alreadyCalculated = False
 		self.solutions = []
 
 	#GETTER && SETTER
@@ -19,40 +22,25 @@ class Var(object):
 		return ( self.name )
 
 	# OPERATOR OVERLOADING
-	def __add__(self, b):
+	def op_add(self, b, varMap):
 		tmp = Var(self.name)
-		if (self.value == 1 and b.getValue() == 1):
+		if (self.searchValue(varMap) == 1 and b.searchValue(varMap) == 1):
 			tmp.setValue(1)
 		else:
 			tmp.setValue(0)
 		return (tmp)
 
-	def __sub__(self, b):
+	def op_xor(self, b, varMap):
 		tmp = Var(self.name)
-		tmp.setValue(int(self.value - ingetValue()))
-		return (tmp)
-
-	def __eq__(self, b):
-		tmp = Var(self.name)
-		tmp.setValue(int(self.value == i.getValue()))
-		return (tmp)
-
-	def __ne__(self, b):
-		tmp = Var(self.name)
-		tmp.setValue(int(self.value != i.getValue()))
-		return (tmp)
-
-	def __xor__(self, b):
-		tmp = Var(self.name)
-		if (self.value == 1 ^ b.getValue() == 1):
+		if (self.searchValue(varMap) == 1 ^ b.searchValue(varMap) == 1):
 			tmp.setValue(1)
 		else:
 			tmp.setValue(0)
 		return (tmp)
 
-	def __or__(self, b):
+	def op_or(self, b, varMap):
 		tmp = Var(self.name)
-		if (self.value == 1 or b.getValue() == 1):
+		if (self.searchValue(varMap) == 1 or b.searchValue(varMap) == 1):
 			tmp.setValue(1)
 		else:
 			tmp.setValue(0)
@@ -64,6 +52,29 @@ class Var(object):
 
 	def display(self):
 		print(self.name + ": "  + str(self.value))
-		print("  solutions:")
-		for solution in self.solutions:
-			print("    "+ solution.getVar()+": "+solution.getSolution() + " => " + solution.getResult())
+		# print("  solutions:")
+		# for solution in self.solutions:
+		# 	print("    "+ solution.getVar()+": "+solution.getSolution() + " => " + solution.getResult())
+
+	def searchValue( self, varMap ):
+		tmpResult = []
+		if ( self.alreadyCalculated == True or self.value == 1 ):
+			self.alreadyCalculated = True
+			return (self.value)
+
+		for (i, solution) in enumerate(self.solutions):
+			tmpResult.append(solution.calculValue(varMap))
+
+		result = -1
+		for (i, solution) in enumerate(tmpResult):
+			if ( result == -1 ):
+				result = solution
+			elif ( result != solution and solution != -1 ):
+				exit_error("Regles incoherante concernant " + self.name)
+			elif ( solution != -1 ) :
+				result = solution
+		self.alreadyCalculated = True
+		self.value = result
+		return (result)
+
+

@@ -10,18 +10,44 @@ class Query(object):
 		self.child = 0
 		self.resolver = self.createResolver(self.left)
 
-	def op_add(self, l, r):
-		return (l + r)
+	def op_add(self, l, r, varMap):
+		return (l.op_add(r, varMap))
 
-	def op_or(self, l, r):
-		return (l | r)
+	def op_or(self, l, r, varMap):
+		return (l.op_or(r, varMap))
 
-	def op_xor(self, l, r):
-		return (l ^ r)
+	def op_xor(self, l, r, varMap):
+		return (l.op_xor(r, varMap))
 
-	def isOperator(self, str):
-		operator = ['+', '|', '&', '^', '-']
-		if (str in operator):
+
+	def opn_add(self, l, r, varMap):
+		result = Var(l.getName())
+		if ( l.getValue() == 1 and r.getValue() != 1 ):
+			result.setValue( 1 )
+		else:
+			result.setValue( 0 )
+		return (result)
+
+	def opn_or(self, l, r, varMap):
+		result = Var(l.getName())
+		if ( l.getValue() == 1 or r.getValue() != 1 ):
+			result.setValue( 1 )
+		else:
+			result.setValue( 0 )
+		return (result)
+
+	def opn_xor(self, l, r, varMap):
+		result = Var(l.getName())
+		if ( l.getValue() == 1 ^ r.getValue() != 1 ):
+			result.setValue( 1 )
+		else:
+			result.setValue( 0 )
+		return (result)
+
+
+	def isOperator(self, string):
+		operator = ['+', '|', '&', '^']
+		if (string in operator):
 			return (True)
 		return (False)
 
@@ -48,7 +74,7 @@ class Query(object):
 		return (self.parse_resolver(varMap, self.resolver).getValue())
 
 	def parse_resolver(self, varMap, resolver):
-		tmp = {}
+		tmp = varMap
 		elem = None
 		self.child = 0
 
@@ -65,10 +91,14 @@ class Query(object):
 	def calcul(self, query, varMap):
 		l = Var(str(self.child))
 		l.setValue(1)
+		opposite = 0
 		ptr = {
 				"+": self.op_add,
 				"|": self.op_or,
-				"^": self.op_xor
+				"^": self.op_xor,
+				"!+": self.opn_add,
+				"!|": self.opn_or,
+				"!^": self.opn_xor
 			}
 		op = "+"
 
@@ -76,6 +106,14 @@ class Query(object):
 			if ( op == None and self.isOperator(x) == True ):
 				op = x
 			elif ( self.isOperator(x) == False ):
-				l.setValue(ptr[op](l, varMap[x]).getValue())
-				op = None
+				if ( x != "!" ):
+					if ( opposite == 1 ):
+						op = "!" + op
+					val = ptr[op](l, varMap[x], varMap).getValue()
+					l.setValue(val)
+					opposite = 0
+					op = None
+				else :
+					opposite = 1
+
 		return (l)

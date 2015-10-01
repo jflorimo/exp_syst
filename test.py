@@ -27,7 +27,6 @@ print(tmp)
 result = test.run(varMap)
 print("result brut = " + str(result))
 
-
 def interpretResult( right, search, result ):
 	undetermined = "!?[A-Z][|^]"
 	composite = "!?[A-Z]\+"

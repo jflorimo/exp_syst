@@ -1,5 +1,5 @@
-import					sys
-from parsing import		parseLine
+import							sys
+from parsing import				parseLine
 from parsing_utils import		init_varsValue
 from parsing_utils import		init_varsQueries
 
@@ -50,5 +50,8 @@ init_varsValue(vars, input)
 init_varsQueries(vars, queries)
 debug()
 
+def searchOutputValues( output, vars ):
+	for (i, name) in enumerate(output):
+		print (name + " ->" + str(vars[name].searchValue( vars )))
 
-
+searchOutputValues(output, vars)
