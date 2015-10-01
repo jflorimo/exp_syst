@@ -1,4 +1,5 @@
 import re
+from var_solution import VarSolution
 from parsing import getQueryRegex
 from parsing import isVar
 
@@ -10,19 +11,15 @@ def init_varsValue(vars, input):
 def setVarsSolution(vars, solutionQuery, resultQuery):
 	for char in resultQuery:
 		if isVar(char):
-			vars[char].setSolutionQuery(solutionQuery)
-
-def setVarsResults(vars, resultQuery, solutionQuery):
-	for char in solutionQuery:
-		if isVar(char):
-			vars[char].setResultQuery(resultQuery)
+			solution = VarSolution(solutionQuery, resultQuery, char)
+			vars[char].setSolutionQuery(solution)
 
 def setVarsData(vars, solution, comparator, result):
 	if comparator == "<=>":
-		print("TODO")
+		setVarsSolution(vars, solution, result)
+		setVarsSolution(vars, result, solution)
 	else:
 		setVarsSolution(vars, solution, result)
-		setVarsResults(vars, result, solution)
 
 def init_varsQueries(vars, queries):
 	for query in queries:

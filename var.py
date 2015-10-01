@@ -4,7 +4,6 @@ class Var(object):
 		self.name = name
 		self.value = 0
 		self.solutions = []
-		self.results = []
 
 	#GETTER && SETTER
 	def setValue(self, value):
@@ -13,11 +12,11 @@ class Var(object):
 	def setSolutionQuery(self, solution):
 		self.solutions.append(solution)
 
-	def setResultQuery(self, result):
-		self.results.append(result)
-
 	def getValue(self):
 		return ( self.value )
+
+	def getName(self):
+		return ( self.name )
 
 	# OPERATOR OVERLOADING
 	def __add__(self, b):
@@ -46,7 +45,4 @@ class Var(object):
 		print(self.name + ": "  + str(self.value))
 		print("  solutions:")
 		for solution in self.solutions:
-			print("    "+solution)
-		print("  results:")
-		for result in self.results:
-			print("    "+result)
+			print("    "+ solution.getVar()+": "+solution.getSolution() + " => " + solution.getResult())

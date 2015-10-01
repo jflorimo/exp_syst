@@ -1,7 +1,7 @@
 import					sys
 from parsing import		parseLine
-from utils import		init_varsValue
-from utils import		init_varsQueries
+from parsing_utils import		init_varsValue
+from parsing_utils import		init_varsQueries
 
 vars = {}
 input = []
@@ -11,15 +11,15 @@ queries = []
 
 def debug():
 	print("######Vars:######")
-	for var in vars:
+	for var in sorted(vars):
 		vars[var].display()
-	print("######Queries:######")
-	for query in queries:
-		print(query)
-	print("######Input:######")
-	print(input)
-	print("######OutPut:######")
-	print(output)
+	# print("######Queries:######")
+	# for query in queries:
+	# 	print(query)
+	# print("######Input:######")
+	# print(input)
+	# print("######OutPut:######")
+	# print(output)
 
 def parse( lines ):
 	for tmp in lines:
