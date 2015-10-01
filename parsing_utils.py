@@ -8,11 +8,18 @@ def init_varsValue(vars, input):
 	for char in input:
 		vars[char].setValue(1)
 
-def setVarsSolution(vars, solutionQuery, resultQuery):
+def isResultQueryUndefined(resultQuery):
 	for char in resultQuery:
-		if isVar(char):
-			solution = VarSolution(solutionQuery, resultQuery, char)
-			vars[char].setSolutionQuery(solution)
+		if char == "^" or char == "|":
+			return True
+	return False
+
+def setVarsSolution(vars, solutionQuery, resultQuery):
+	if not isResultQueryUndefined(resultQuery):
+		for char in resultQuery:
+			if isVar(char):
+				solution = VarSolution(solutionQuery, resultQuery, char)
+				vars[char].setSolutionQuery(solution)
 
 def setVarsData(vars, solution, comparator, result):
 	if comparator == "<=>":
