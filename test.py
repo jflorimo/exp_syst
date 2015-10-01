@@ -10,10 +10,6 @@ C = Var('C')
 A.setValue(1)
 B.setValue(1)
 C.setValue(0)
-# print (A + B)
-# A.setValue('1')
-# print (A + B)
-# B.setValue('1')
 
 varMap = {
 			"A" : A,
@@ -21,7 +17,12 @@ varMap = {
 			"C" : C
 		}
 
-test = Query("(A+B)|(A+B)")
-print( "---------" )
-test.run(varMap)
+query = "(A+B)|(B+C)"
+test = Query(query)
+print(query)
+tmp = query
+for (name, value) in varMap.items():
+	tmp = str.replace(tmp, name, str(value.getValue()))
+print(tmp)
+print(str(test.run(varMap)))
 

@@ -5,11 +5,10 @@ from var import Var
 class Query(object):
 
 	def __init__(self, left):
-		print (left)
 		self.left = left
 		self.priority = {}
+		self.child = 0
 		self.resolver = self.createResolver(self.left)
-		print (self.resolver)
 
 	def findSubQuery( self, result ) :
 		regexp = "(\((!?([A-Z]|\?)[+^|]){1,}!?([A-Z]|\?)\))"
@@ -35,14 +34,8 @@ class Query(object):
 			pos = re.search(regexp, result)
 			tmp = result[pos.start() + 1:pos.end() - 1]
 			result = re.subn(regexp, "?", result, count=1)[0]
-			# sub = result
-			# while (self.findSubQuery(sub)) :
-			# 	pos = re.search(regexp, result)
-			# 	tmp = {result[pos.start() + 1:pos.end() - 1]: [tmp]}
-			# 	sub = result[pos.start() + 1:pos.end() - 1]
-				# result = result[:pos.start()] + "?" + result[pos.end():]
-
 			resolver[tmp_final].append(tmp)
+
 		return resolver
 
 	def isOperator(self, str):
@@ -52,12 +45,21 @@ class Query(object):
 		return (False)
 
 	def run(self, varMap):
-		self.parse_resolver(varMap, self.resolver)
+		return (self.parse_resolver(varMap, self.resolver).getValue())
 
 	def parse_resolver(self, varMap, resolver):
+		tmp = {}
+		elem = None
+		self.child = 0
 		for (key, value) in resolver.items():
+			if (elem == None):
+				elem = key
 			for (i, query) in enumerate(value):
-				print(self.calcul(query, varMap).getValue())
+				tmp[str(self.child)] = self.calcul(query, varMap)
+				self.child += 1
+		for ( i, var ) in tmp.items():
+			elem = str.replace(elem, "?", var.getName(), 1)
+		return (self.calcul(elem, tmp))
 
 	def op_add(self, l, r):
 		return (l + r)
@@ -69,7 +71,7 @@ class Query(object):
 		return (l ^ r)
 
 	def calcul(self, query, varMap):
-		l = Var("x")
+		l = Var(str(self.child))
 		l.setValue(1)
 		ptr = {
 				"+": self.op_add,
@@ -77,11 +79,10 @@ class Query(object):
 				"^": self.op_xor
 			}
 		op = "+"
-		r = None
 		for x in query:
 			if ( op == None and self.isOperator(x) == True ):
 				op = x
 			elif ( self.isOperator(x) == False ):
-				r = x
-				l.setValue(ptr[op](l, r))
+				l.setValue(ptr[op](l, varMap[x]).getValue())
+				op = None
 		return (l)
