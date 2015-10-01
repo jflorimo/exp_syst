@@ -9,7 +9,7 @@ authorizedSpecialChars = "+|^()=<>!? 	\n"
 authorizedChars = authorizedSpecialChars +''.join(autorizedVars)
 
 def getQueryRegex():
-	return "^(([!]?[A-Z])([+^|]([!]?[A-Z]))*)(=>|<=>)(([!]?[A-Z])([+^|]([!]?[A-Z]))*)$"
+	return "^([(]?([!]?[A-Z])[)]?([+^|][(]?([!]?[A-Z])[)]?)*)(=>|<=>)([(]?([!]?[A-Z])[)]?([+^|][(]?([!]?[A-Z])[)]?)*)$"
 
 def isVar(letter):
 	for var in autorizedVars:
