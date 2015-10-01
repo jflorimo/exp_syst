@@ -1,25 +1,35 @@
 import re
+import time
+from var import Var
 
 class Query(object):
 
-	def __init__(self, querystr):
-		print (querystr)
-		self.queryStr = querystr
+	def __init__(self, left):
+		self.left = left
 		self.priority = {}
-		self.resolver = self.resolve(self.queryStr)
-		print (self.resolver)
+		self.child = 0
+		self.resolver = self.createResolver(self.left)
 
-	def findSubQuery( self, result ) :
-		if re.subn("(\(!?\?)([+^|]!?([A-Z]|\?)){1,}\)", "?", result, count=1)[0] != result:
-			return True
-		elif re.subn("\((!?([A-Z]|\?)[+^|]){1,}!?\?\)", "?", result, count=1)[0] != result :
-			return True
-		return False
+	def op_add(self, l, r):
+		return (l + r)
 
-	def resolve( self, result ):
+	def op_or(self, l, r):
+		return (l | r)
+
+	def op_xor(self, l, r):
+		return (l ^ r)
+
+	def isOperator(self, str):
+		operator = ['+', '|', '&', '^', '-']
+		if (str in operator):
+			return (True)
+		return (False)
+
+	def createResolver( self, result ):
 		resultold = result
 		i = 0
 		regexp = "(\((!?([A-Z]|\?)[+^|]){1,}!?([A-Z]|\?)\))"
+
 		while ( result != re.sub(regexp, "?", result)):
 			result = re.sub(regexp, "?", result)
 		tmp_final = result
@@ -28,53 +38,44 @@ class Query(object):
 
 		while ( result != re.subn(regexp, "?", result, count=1)[0] ):
 			pos = re.search(regexp, result)
-			tmp = {result[pos.start() + 1:pos.end() - 1]: []}
+			tmp = result[pos.start() + 1:pos.end() - 1]
 			result = re.subn(regexp, "?", result, count=1)[0]
-
-			while (self.findSubQuery(result)) :
-				if re.subn("(\(!?\?)([+^|]!?([A-Z]|\?)){1,}\)", "?", result, count=1)[0] != result :
-					pos = re.search("(\(!?\?)([+^|]!?([A-Z]|\?)){1,}\)", result)
-					tmp2 = {result[pos.start() + 1:pos.end() - 1]: [tmp]}
-					tmp = tmp2
-					result = re.subn("(\(!?\?)([+^|]!?([A-Z]|\?)){1,}\)", "?", result, count=1)[0]
-
-				if re.subn("\((!?([A-Z]|\?)[+^|]){1,}!?\?\)", "?", result, count=1)[0] != result :
-					pos = re.search("\((!?([A-Z]|\?)[+^|]){1,}!?\?\)", result)
-					tmp2 = {result[pos.start() + 1:pos.end() - 1]: [tmp]}
-					tmp = tmp2
-					result = re.subn("\((!?([A-Z]|\?)[+^|]){1,}!?\?\)", "?", result, count=1)[0]
-
 			resolver[tmp_final].append(tmp)
+
 		return resolver
 
+	def run(self, varMap):
+		return (self.parse_resolver(varMap, self.resolver).getValue())
 
-	def isOperator(self, str):
-		operator = ['+', '|', '&', '^', '-']
-		if (str in operator):
-			return (True)
-		return (False)
+	def parse_resolver(self, varMap, resolver):
+		tmp = {}
+		elem = None
+		self.child = 0
 
-	def run(self):
-		i = 0
-		while ( i < self.queryStr.length() ):
-			if ( self.queryStr[i] == "(" ):
-				i += self.parenthese( self.queryStr, i )
+		for (key, value) in resolver.items():
+			if (elem == None):
+				elem = key
+			for (i, query) in enumerate(value):
+				tmp[str(self.child)] = self.calcul(query, varMap)
+				self.child += 1
+		for ( i, var ) in tmp.items():
+			elem = str.replace(elem, "?", var.getName(), 1)
+		return (self.calcul(elem, tmp))
 
-	def calcul(self, varMap):
-		left = "old Value"
-		operator = "+"
-		right = None
+	def calcul(self, query, varMap):
+		l = Var(str(self.child))
+		l.setValue(1)
+		ptr = {
+				"+": self.op_add,
+				"|": self.op_or,
+				"^": self.op_xor
+			}
+		op = "+"
 
-		for x in self.queryStr:
-			if ( operator == None and self.isOperator(x) ):
-				operator = x
-			elif ( operator != None and self.isOperator(x) ):
-				tmpOp = 0 if operator == '+' else -1
-				tmpOp2 = 0 if x == '+' else -1
-				operator = '-' if tmpOp + tmpOp2 == -1 else '+'
-			elif ( right == None ):
-				right = x
-				print (left + " " + operator + " " +  right)
-				operator = None
-				right = None
-
+		for x in query:
+			if ( op == None and self.isOperator(x) == True ):
+				op = x
+			elif ( self.isOperator(x) == False ):
+				l.setValue(ptr[op](l, varMap[x]).getValue())
+				op = None
+		return (l)

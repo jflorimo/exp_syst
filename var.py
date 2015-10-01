@@ -20,22 +20,43 @@ class Var(object):
 
 	# OPERATOR OVERLOADING
 	def __add__(self, b):
-		return (int(self.value) and int(b.getValue()))
+		tmp = Var(self.name)
+		if (self.value == 1 and b.getValue() == 1):
+			tmp.setValue(1)
+		else:
+			tmp.setValue(0)
+		return (tmp)
 
 	def __sub__(self, b):
-		return (int(self.value) - int(b.getValue()))
+		tmp = Var(self.name)
+		tmp.setValue(int(self.value - ingetValue()))
+		return (tmp)
 
 	def __eq__(self, b):
-		return (int(self.value) == int(b.getValue()))
+		tmp = Var(self.name)
+		tmp.setValue(int(self.value == i.getValue()))
+		return (tmp)
 
 	def __ne__(self, b):
-		return (int(self.value) != int(b.getValue()))
+		tmp = Var(self.name)
+		tmp.setValue(int(self.value != i.getValue()))
+		return (tmp)
 
 	def __xor__(self, b):
-		return (int(self.value) ^ int(b.getValue()))
+		tmp = Var(self.name)
+		if (self.value == 1 ^ b.getValue() == 1):
+			tmp.setValue(1)
+		else:
+			tmp.setValue(0)
+		return (tmp)
 
 	def __or__(self, b):
-		return (int(self.value) | int(b.getValue()))
+		tmp = Var(self.name)
+		if (self.value == 1 or b.getValue() == 1):
+			tmp.setValue(1)
+		else:
+			tmp.setValue(0)
+		return (tmp)
 
 	# METHODS
 	def toString(self):
