@@ -15,6 +15,9 @@ class Var(object):
 	def setSolutionQuery(self, solution):
 		self.solutions.append(solution)
 
+	def setSolutionQueryAtBegin(self, solution):
+		self.solution.insert(0,solution)
+
 	def getValue(self):
 		return ( self.value )
 

@@ -14,19 +14,22 @@ def isResultQueryUndefined(resultQuery):
 			return True
 	return False
 
-def setVarsSolution(vars, solutionQuery, resultQuery):
+def setVarsSolution(vars, solutionQuery, resultQuery, boolean):
 	if not isResultQueryUndefined(resultQuery):
 		for char in resultQuery:
 			if isVar(char):
 				solution = VarSolution(solutionQuery, resultQuery, char)
-				vars[char].setSolutionQuery(solution)
+				if not boolean:
+					vars[char].setSolutionQuery(solution)
+				else:
+					vars[char].setSolutionQueryAtBegin(solution)
 
 def setVarsData(vars, solution, comparator, result):
 	if comparator == "<=>":
-		setVarsSolution(vars, solution, result)
-		setVarsSolution(vars, result, solution)
+		setVarsSolution(vars, solution, result, True)
+		setVarsSolution(vars, result, solution, True)
 	else:
-		setVarsSolution(vars, solution, result)
+		setVarsSolution(vars, solution, result, False)
 
 def init_varsQueries(vars, queries):
 	for query in queries:
