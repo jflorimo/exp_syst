@@ -60,8 +60,11 @@ class Var(object):
 			return (self.value)
 		print("Search " + self.name + " value")
 
-		for (i, solution) in enumerate(self.solutions):
-			tmpResult.append(solution.calculValue(varMap))
+		solutions = self.solutions
+		for (i, solution) in enumerate(solutions):
+			if ( solution != None ):
+				self.solutions[i] = None
+				tmpResult.append(solution.calculValue(varMap))
 
 		result = -1
 		for (i, solution) in enumerate(tmpResult):
