@@ -3,10 +3,11 @@
 # shown here. spacing is not important
 
 A + B => C #
-(A + C) | (A + B) => D 		# A and B and C implies D
-!A | !C => E 			# A or B implies C
+!X + B => C #
+(A + C) | (A | B) => D 		# A and B and C implies D
+!A | !C => !E 			# A or B implies C
 
 =AB				# Initial facts : A, B and G are true. All others are false.
 					# If no facts are initially true, then a simple "=" followed
 					# by a newline is used
-?CDE 				# Queries : What are G, V and X ?
+?DCE 				# Queries : What are G, V and X ?

@@ -52,15 +52,13 @@ class Var(object):
 
 	def display(self):
 		print(self.name + ": "  + str(self.value))
-		# print("  solutions:")
-		# for solution in self.solutions:
-		# 	print("    "+ solution.getVar()+": "+solution.getSolution() + " => " + solution.getResult())
 
 	def searchValue( self, varMap ):
 		tmpResult = []
-		if ( self.alreadyCalculated == True or self.value == 1 ):
+		if ( self.alreadyCalculated == True or self.value == 1 or len(self.solutions) == 0 ):
 			self.alreadyCalculated = True
 			return (self.value)
+		print("Search " + self.name + " value")
 
 		for (i, solution) in enumerate(self.solutions):
 			tmpResult.append(solution.calculValue(varMap))
@@ -75,6 +73,7 @@ class Var(object):
 				result = solution
 		self.alreadyCalculated = True
 		self.value = result
+		print("Value found for " + self.name)
 		return (result)
 
 
