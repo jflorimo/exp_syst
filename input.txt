@@ -3,19 +3,22 @@
 # shown here. spacing is not important
 
 
-A + B + C => D # A and B and C implies D
-A | B => C # A or B implies C
-C <=> E
-A + !B => F # A and not B implies F
-C | !G => H # C or not G implies H
-V ^ W => X # V xor W implies X
-A + B => Y + Z # A and B implies Y and Z
-E + F => !V # E and F implies not V
-E => !A
+A + B => P # Simple +
+A | B => O # Simple |
+A + !B => I # Simple !
+A ^ I => C # Simple ^
 
-=ABG # Initial facts : A, B and G are true. All others are false.
+A + B + P => M # Multiple +
+A | B | P => U # Multiple |
+A ^ B ^ P => L # Multiple ^
 
-# If no facts are initially true, then a simple "=" followed
-# by a newline is used
+(A + B) | (M ^ U) => E # Tout les operateur et parenthese
+A + B => X + D # Query a droite
 
-?ABGCDEFVWHXYZ# Queries : What are G, V and X ?
+A + B => !R # ! a droite
+
+J <=> C # Double implication simple
+D + A <=> N + Y # Double implication complexe
+=AB
+
+?POICMULEXDANYRJ

@@ -22,23 +22,34 @@ class Query(object):
 
 	def opn_add(self, l, r, varMap):
 		result = Var(l.getName())
-		if ( l.getValue() == 1 and r.getValue() != 1 ):
+
+		if ( l.getValue() == 1 and r.getValue() == 0 ):
 			result.setValue( 1 )
+		elif ( l.getValue() == 0 or r.getValue() == 1 ):
+			result.setValue( 0 )
+		elif ( l.getValue() == -1 or r.getValue() == -1 ):
+			result.setValue( -1 )
 		else:
 			result.setValue( 0 )
 		return (result)
 
 	def opn_or(self, l, r, varMap):
 		result = Var(l.getName())
-		if ( l.getValue() == 1 or r.getValue() != 1 ):
+		if ( l.getValue() == 1 or r.getValue() == 0 ):
 			result.setValue( 1 )
+		elif ( l.getValue() == 0 or r.getValue() == 1 ):
+			result.setValue( 0 )
+		elif ( l.getValue() == -1 and r.getValue() == -1 ):
+			result.setValue( -1 )
 		else:
 			result.setValue( 0 )
 		return (result)
 
 	def opn_xor(self, l, r, varMap):
 		result = Var(l.getName())
-		if ( l.getValue() == 1 ^ r.getValue() != 1 ):
+		if ( l.getValue() == -1 or r.getValue() == -1 ):
+			result.setValue( -1 )
+		elif ( l.getValue() == 1 ^ r.getValue() == 0 ):
 			result.setValue( 1 )
 		else:
 			result.setValue( 0 )
@@ -74,7 +85,8 @@ class Query(object):
 		return (self.parse_resolver(varMap, self.resolver).getValue())
 
 	def parse_resolver(self, varMap, resolver):
-		tmp = varMap
+		tmp = {}
+		tmpVarMap = varMap
 		elem = None
 		self.child = 0
 
@@ -86,10 +98,12 @@ class Query(object):
 				self.child += 1
 		for ( i, var ) in tmp.items():
 			elem = str.replace(elem, "?", var.getName(), 1)
-		return (self.calcul(elem, tmp))
+			tmpVarMap[var.getName()] = var
+		return (self.calcul(elem, tmpVarMap))
 
 	def calcul(self, query, varMap):
 		l = Var(str(self.child))
+		# print (str(self.child))
 		l.setValue(1)
 		opposite = 0
 		ptr = {

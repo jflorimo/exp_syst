@@ -7,6 +7,7 @@ class Var(object):
 		self.value = 0
 		self.alreadyCalculated = False
 		self.solutions = []
+		self.inProgress = False
 
 	#GETTER && SETTER
 	def setValue(self, value):
@@ -29,13 +30,19 @@ class Var(object):
 		tmp = Var(self.name)
 		if (self.searchValue(varMap) == 1 and b.searchValue(varMap) == 1):
 			tmp.setValue(1)
+		elif ( self.searchValue(varMap) == 0 or b.searchValue(varMap) == 0 ):
+			tmp.setValue(0)
+		elif ( self.searchValue(varMap) == -1 or b.searchValue(varMap) == -1 ) :
+			tmp.setValue(-1)
 		else:
 			tmp.setValue(0)
 		return (tmp)
 
 	def op_xor(self, b, varMap):
 		tmp = Var(self.name)
-		if (self.searchValue(varMap) == 1 ^ b.searchValue(varMap) == 1):
+		if ( self.searchValue(varMap) == -1 or b.searchValue(varMap) == -1 ) :
+			tmp.setValue(-1)
+		elif (self.searchValue(varMap) == 1 ^ b.searchValue(varMap) == 1):
 			tmp.setValue(1)
 		else:
 			tmp.setValue(0)
@@ -45,6 +52,10 @@ class Var(object):
 		tmp = Var(self.name)
 		if (self.searchValue(varMap) == 1 or b.searchValue(varMap) == 1):
 			tmp.setValue(1)
+		elif ( self.searchValue(varMap) == 0 or b.searchValue(varMap) == 0 ):
+			tmp.setValue(0)
+		elif ( self.searchValue(varMap) == -1 and b.searchValue(varMap) == -1 ) :
+			tmp.setValue(-1)
 		else:
 			tmp.setValue(0)
 		return (tmp)
@@ -58,16 +69,17 @@ class Var(object):
 
 	def searchValue( self, varMap ):
 		tmpResult = []
-		if ( self.alreadyCalculated == True or self.value == 1 or len(self.solutions) == 0 ):
+
+		if ( ( self.alreadyCalculated == True and self.value != -1 ) or self.value == 1 or len(self.solutions) == 0 ):
 			self.alreadyCalculated = True
 			return (self.value)
-		print("Search " + self.name + " value")
+		# print("Search " + self.name + " value")
+		if ( self.inProgress == True ):
+			return (-1)
 
-		solutions = self.solutions
-		for (i, solution) in enumerate(solutions):
-			if ( solution != None ):
-				self.solutions[i] = None
-				tmpResult.append(solution.calculValue(varMap))
+		self.inProgress = True
+		for (i, solution) in enumerate(self.solutions):
+			tmpResult.append(solution.calculValue(varMap))
 
 		result = -1
 		for (i, solution) in enumerate(tmpResult):
@@ -79,7 +91,8 @@ class Var(object):
 				result = solution
 		self.alreadyCalculated = True
 		self.value = result
-		print("Value found for " + self.name)
+		# print("Value found for " + self.name)
+		self.inProgress = False
 		return (result)
 
 
