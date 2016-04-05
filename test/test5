@@ -1,0 +1,6 @@
+#test5 SAME CONDITIONS
+B => A 
+C => A 
+
+[INITIAL FACTS HERE] 
+?A 

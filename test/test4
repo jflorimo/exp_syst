@@ -1,0 +1,5 @@
+#test4 NEGATION ! simple test
+B + !C => A 
+
+[INITIAL FACTS HERE] 
+?A 

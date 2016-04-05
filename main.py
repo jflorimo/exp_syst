@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import							sys
 from parsing import				parseLine
 from parsing_utils import		init_varsValue
@@ -10,16 +11,16 @@ queries = []
 
 
 def debug():
-	print("######Vars:######")
+	print "######Vars:######"
 	for var in sorted(vars):
 		vars[var].display()
-	# print("######Queries:######")
-	# for query in queries:
-	# 	print(query)
-	# print("######Input:######")
-	# print(input)
-	# print("######OutPut:######")
-	# print(output)
+	print("######Queries:######")
+	for query in queries:
+		print(query)
+	print("######Input:######")
+	print(input)
+	print("######OutPut:######")
+	print(output)
 
 def parse( lines ):
 	for tmp in lines:
@@ -41,10 +42,10 @@ def read( filename ):
 	parse(result)
 
 if ( len(sys.argv) < 2 ) :
-	print("Usage : ./" + sys.argv[0] + " [Input file]")
+	print("Usage : " + sys.argv[0] + " [Input file]")
 	exit( -1 )
 
-print(sys.argv[1])
+#print(sys.argv[1])
 read(sys.argv[1])
 init_varsValue(vars, input)
 init_varsQueries(vars, queries)

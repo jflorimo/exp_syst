@@ -1,0 +1,7 @@
+#test3 XOR simple test
+B + C => A 
+D ^ E => B 
+B => C 
+
+=E
+?A 

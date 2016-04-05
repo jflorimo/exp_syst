@@ -1,0 +1,6 @@
+#test6 Parentheses
+A | B + C => E 
+(F | G) + H => E 
+
+=AC
+?E 

@@ -1,0 +1,6 @@
+#test2 OR simple test
+B + C => A 
+D | E => B 
+B => C 
+=DE
+?A 
