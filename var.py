@@ -42,7 +42,7 @@ class Var(object):
 		tmp = Var(self.name)
 		if ( self.searchValue(varMap) == -1 or b.searchValue(varMap) == -1 ) :
 			tmp.setValue(-1)
-		elif (self.searchValue(varMap) == 1 ^ b.searchValue(varMap) == 1):
+		elif (self.searchValue(varMap) ^ b.searchValue(varMap)):
 			tmp.setValue(1)
 		else:
 			tmp.setValue(0)
@@ -66,7 +66,8 @@ class Var(object):
 
 	def display(self):
 		print(self.name + ": "  + str(self.value))
-
+		print(self.name + ": "  + str(self.alreadyCalculated))
+	
 	def searchValue( self, varMap ):
 		tmpResult = []
 
