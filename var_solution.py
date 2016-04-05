@@ -16,6 +16,9 @@ class VarSolution(object):
 	def getVar(self):
 		return ( self.var )
 
+	def display(self):
+		print "Var:"+ self.var + " - right: "+ self.right + " - solution: " + self.solution
+
 	def calculValue( self, varMap ):
 		undetermined = "!?[A-Z][|^]"
 		composite = "!?[A-Z]\+"

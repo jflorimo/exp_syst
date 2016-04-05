@@ -66,7 +66,7 @@ class Var(object):
 
 	def display(self):
 		print(self.name + ": "  + str(self.value))
-		print(self.name + ": "  + str(self.alreadyCalculated))
+		print("Alredy calculated:" + ": "  + str(self.alreadyCalculated))
 	
 	def searchValue( self, varMap ):
 		tmpResult = []
@@ -74,14 +74,18 @@ class Var(object):
 		if ( ( self.alreadyCalculated == True and self.value != -1 ) or self.value == 1 or len(self.solutions) == 0 ):
 			self.alreadyCalculated = True
 			return (self.value)
-		# print("Search " + self.name + " value")
+		
 		if ( self.inProgress == True ):
 			return (-1)
 
 		self.inProgress = True
 		for (i, solution) in enumerate(self.solutions):
 			tmpResult.append(solution.calculValue(varMap))
-
+		print "######--debug--######"
+		self.display()
+		for solution in self.solutions:
+			print(solution.display())
+		print "#####################"	
 		result = -1
 		for (i, solution) in enumerate(tmpResult):
 			if ( result == -1 ):
